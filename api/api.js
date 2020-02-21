@@ -1,7 +1,7 @@
-const API = require('../api');
+const router = require('./utilities/router');
 
 exports.handler = (event, context, callback) => {
-    const response = API.handleEvent(event);
+    const response = router.handleEvent(event);
 
     callback(null, {
         statusCode: response.status,
