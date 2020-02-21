@@ -2,7 +2,7 @@
     'use strict';
 
     const http = (() => {
-        const queryString = (data) => Object.keys(parameters).map(key => `${key}=${data[key]}`).join('&');
+        const queryString = (data) => Object.keys(data).map(key => `${key}=${data[key]}`).join('&');
 
         const request = (method, url, data) => {
             switch (method) {
