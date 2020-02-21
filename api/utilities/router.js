@@ -5,7 +5,7 @@ const requestModel = require('./request-model');
 const responseModel = require('./response-model');
 
 const routeExists = (routeName) => {
-    const routeFile = path.resolve(`${__dirname}/../routes/${routeName}.js`);
+    const routeFile = path.resolve(`../routes/${routeName}.js`);
 
     return fs.existsSync(routeFile);
 };
