@@ -3,37 +3,25 @@ const fs = require('fs-extra');
 
 const requestModel = require('./request-model');
 const responseModel = require('./response-model');
-
-const routeExists = (routeName) => {
-    const routeFile = path.resolve(`../routes/${routeName}.js`);
-
-    return fs.existsSync(routeFile);
-};
-
-const methodExists = (route, methodName) => {
-    return typeof route[methodName] === 'function';
+const controllers = {
+    index: require('../index/controller'),
+    items: require('../items/controller'),
+    lists: require('../lists/controller'),
+    tags: require('../tags/controller'),
+    users: require('../users/controller'),
 };
 
 module.exports = {
     handleEvent: (awsEvent) => {
         const request = requestModel.fromAWSEvent(awsEvent);
-        const routeName = request.route;
-        const methodName = request.method;
 
-        return responseModel.success({
-            request,
-            routeName,
-            methodName,
-            routeExists: routeExists(routeName),
-        });
+        if (Object.keys(controllers).includes(request.route)) {
+            const controller = controllers[request.route];
 
-        if (routeExists(routeName)) {
-            const route = require(`../routes/${routeName}`);
-
-            if (methodExists(route, methodName)) {
-                return route[methodName](request, responseModel);
+            if (typeof controller[request.method] === 'function') {
+                return controller[request.method](request, responseModel);
             } else {
-                return responseModel.error(`Resource '${routeName}' does not support method '${methodName}'`);
+                return responseModel.error(`Resource '${request.route}' does not support method '${request.method}'`);
             }
         } else {
             return responseModel.notFound();
