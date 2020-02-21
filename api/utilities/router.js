@@ -20,6 +20,13 @@ module.exports = {
         const routeName = request.route;
         const methodName = request.method;
 
+        return responseModel.success({
+            request,
+            routeName,
+            methodName,
+            routeExists: routeExists(routeName),
+        });
+
         if (routeExists(routeName)) {
             const route = require(`../routes/${routeName}`);
 
