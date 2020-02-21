@@ -8,7 +8,7 @@
             switch (method) {
                 case 'GET':
                 case 'DELETE':
-                    return new Request(`${url}?${queryString(data)}`, { method });
+                    return new Request(data ? `${url}?${queryString(data)}` : url, { method });
 
                 case 'POST':
                 case 'PUT':
