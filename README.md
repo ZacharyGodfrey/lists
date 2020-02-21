@@ -10,4 +10,4 @@ Hosted on Netlify at [https://zg-lists.netlify.com](https://zg-lists.netlify.com
 
 - Build Command: `npm run build`
 - Build Directory: `dist`
-- Functions Directory: `functions`
+- Functions Directory: `api`
