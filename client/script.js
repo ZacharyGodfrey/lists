@@ -12,7 +12,7 @@
 
                 case 'POST':
                 case 'PUT':
-                    return new Request(fullUrl, {
+                    return new Request(url, {
                         method: method,
                         headers: { 'content-type': 'application/json' },
                         body: JSON.stringify(data, null, 2)
