@@ -5,7 +5,7 @@ const requestModel = require('./request-model');
 const responseModel = require('./response-model');
 
 const routeExists = (routeName) => {
-    const routeFile = path.resolve(`${__dirname}/routes/${routeName}.js`);
+    const routeFile = path.resolve(`${__dirname}/../routes/${routeName}.js`);
 
     return fs.existsSync(routeFile);
 };
@@ -21,7 +21,7 @@ module.exports = {
         const methodName = request.method;
 
         if (routeExists(routeName)) {
-            const route = require(`./routes/${routeName}`);
+            const route = require(`../routes/${routeName}`);
 
             if (methodExists(route, methodName)) {
                 return route[methodName](request, responseModel);
