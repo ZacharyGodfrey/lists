@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "prebuild": "npm rebuild node-sass",
+    "build": "node ./build.js",
+    "serve": "http-server ./dist -p 8080",
+    "start": "npm run build && npm run serve"
+  },
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "glob": "^7.1.6",
+    "node-sass": "^4.13.1"
+  },
+  "devDependencies": {
+    "http-server": "^0.12.1"
+  }
+}
