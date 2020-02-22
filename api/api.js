@@ -1,11 +1,12 @@
-const router = require('./utilities/router');
+const express = require('express');
+const serverless = require('serverless-http');
 
-exports.handler = (event, context, callback) => {
-    const response = router.handleEvent(event);
+const server = express();
+const middleware = require('./server/middleware');
+const router = require('./server/router');
 
-    callback(null, {
-        statusCode: response.status,
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(response.body, null, 2)
-    });
-};
+middleware.addToServer(server);
+
+server.use('/.netlify/functions/api', router);
+
+module.exports.handler = serverless(server);
