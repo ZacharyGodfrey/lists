@@ -11,7 +11,11 @@ router.get('/', (req, res) => {
 });
 
 // Endpoint discovery
-glob.sync('../endpoints/**/routes.js', { cwd: __dirname }).forEach(fileName => {
+const endpoints = glob.sync('../endpoints/**/routes.js', { cwd: __dirname });
+
+console.log('Endpoint Discovery: ' + JSON.stringify(endpoints, null, 2));
+
+endpoints.forEach(fileName => {
     const addRoutes = require(fileName);
 
     addRoutes(router);
