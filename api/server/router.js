@@ -1,5 +1,4 @@
 const express = require('express');
-const glob = require('glob');
 
 const router = express.Router();
 
@@ -10,14 +9,11 @@ router.get('/', (req, res) => {
     });
 });
 
-// Endpoint discovery
-const endpoints = glob.sync('./endpoints/**/routes.js', { cwd: __dirname });
-
-endpoints.forEach(fileName => {
-    const addRoutes = require(fileName);
-
-    addRoutes(router);
-});
+// Application endpoints
+require('../endpoints/items/routes')(router);
+require('../endpoints/lists/routes')(router);
+require('../endpoints/tags/routes')(router);
+require('../endpoints/users/routes')(router);
 
 // Standard 404 response
 router.use((req, res) => {
