@@ -12,3 +12,4 @@ Hosted on Netlify at [https://zg-lists.netlify.com](https://zg-lists.netlify.com
 - Divide client into pages and reusable partials
 - Implement SCSS style rules in client
 - Separate HTTP fetch wrapper into its own file
+- Add logging throughout the API
