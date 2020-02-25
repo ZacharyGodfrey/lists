@@ -1,25 +1,96 @@
-const express = require('express');
+const services = require('../services');
+const response = require('./response');
+const logger = require('./logger');
 
-const router = express.Router();
+module.exports = {
+    from: (expressRouter) => {
+        // Root endpoint
+        expressRouter.get('/', (_, res) => {
+            response.from(res).success({
+                serverTime: new Date().toISOString()
+            });
+        });
 
-// Default endpoint
-router.get('/', (req, res) => {
-    res.status(200).json({
-        serverTime: new Date().toISOString()
-    });
-});
+        // Get many endpoint
+        expressRouter.get('/:service', (req, res, next) => {
+            try {
+                if (services[req.params.service]) {
+                    const service = services[req.params.service].init(logger);
 
-// Application endpoints
-require('../endpoints/items/routes')(router);
-require('../endpoints/lists/routes')(router);
-require('../endpoints/tags/routes')(router);
-require('../endpoints/users/routes')(router);
+                    service.query(req.query, response.from(res));
+                } else {
+                    next();
+                }
+            } catch (error) {
+                response.from(res).error(error.message);
+            }
+        });
 
-// Standard 404 response
-router.use((req, res) => {
-    res.status(404).json({
-        message: 'The requested resource was not found.'
-    });
-});
+        // Get single endpoint
+        expressRouter.get('/:service/:id', (req, res, next) => {
+            try {
+                if (services[req.params.service]) {
+                    const service = services[req.params.service].init(logger);
 
-module.exports = router;
+                    service.getById(req.params.id, response.from(res));
+                } else {
+                    next();
+                }
+            } catch (error) {
+                response.from(res).error(error.message);
+            }
+        });
+
+        // Create endpoint
+        expressRouter.post('/:service', (req, res, next) => {
+            try {
+                if (services[req.params.service]) {
+                    const service = services[req.params.service].init(logger);
+
+                    service.create(req.body, response.from(res));
+                } else {
+                    next();
+                }
+            } catch (error) {
+                response.from(res).error(error.message);
+            }
+        });
+
+        // Update endpoint
+        expressRouter.put('/:service/:id', (req, res, next) => {
+            try {
+                if (services[req.params.service]) {
+                    const service = services[req.params.service].init(logger);
+
+                    service.update(req.params.id, req.body, response.from(res));
+                } else {
+                    next();
+                }
+            } catch (error) {
+                response.from(res).error(error.message);
+            }
+        });
+
+        // Delete endpoint
+        expressRouter.delete('/:service/:id', (req, res, next) => {
+            try {
+                if (services[req.params.service]) {
+                    const service = services[req.params.service].init(logger);
+
+                    service.delete(req.params.id, response.from(res));
+                } else {
+                    next();
+                }
+            } catch (error) {
+                response.from(res).error(error.message);
+            }
+        });
+
+        // Standard 404 response
+        expressRouter.use((_, res) => {
+            response.from(res).notFound();
+        });
+
+        return expressRouter;
+    },
+};
